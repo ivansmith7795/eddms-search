@@ -1,4 +1,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface SearchResult {
   id: string;
@@ -33,6 +35,7 @@ export function SearchResults({
     startIndex,
     startIndex + resultsPerPage,
   );
+
   if (isLoading) {
     return <div className="text-center">Searching...</div>;
   }
@@ -44,42 +47,62 @@ export function SearchResults({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       {paginatedResults.map((result) => (
         <Card
           key={result.id}
-          className={`cursor-pointer transition-colors ${selectedResultId === result.id ? "border-primary" : ""}`}
+          className={`cursor-pointer transition-colors hover:bg-muted/50 ${selectedResultId === result.id ? "border-primary" : ""}`}
           onClick={() => onResultSelect(result)}
         >
-          <CardHeader>
-            <CardTitle className="text-lg">{result.title}</CardTitle>
+          <CardHeader className="py-2.5 px-4">
+            <CardTitle className="text-sm font-medium">
+              {result.title}
+            </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground mb-2">
-              {result.summary}
-            </p>
-            <a
-              href={result.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs text-blue-500 hover:text-blue-700 underline"
+          <CardContent className="py-0 px-4 pb-3">
+            <p className="text-xs text-muted-foreground">{result.summary}</p>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onResultSelect(result);
+              }}
+              className="text-xs text-primary hover:text-primary/80 underline mt-2 inline-block"
             >
               View Document
-            </a>
+            </button>
           </CardContent>
         </Card>
       ))}
       {totalPages > 1 && (
-        <div className="flex justify-center gap-2 mt-4">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <button
-              key={page}
-              onClick={() => onPageChange(page)}
-              className={`px-3 py-1 rounded ${currentPage === page ? "bg-primary text-primary-foreground" : "bg-secondary"}`}
-            >
-              {page}
-            </button>
-          ))}
+        <div className="flex items-center justify-center gap-2 mt-4">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <div className="flex items-center gap-1">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <Button
+                key={page}
+                variant={currentPage === page ? "default" : "outline"}
+                size="sm"
+                onClick={() => onPageChange(page)}
+              >
+                {page}
+              </Button>
+            ))}
+          </div>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
+            disabled={currentPage === totalPages}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
       )}
     </div>

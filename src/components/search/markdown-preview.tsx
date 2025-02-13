@@ -12,7 +12,7 @@ export function MarkdownPreview({ title, content }: MarkdownPreviewProps) {
       <CardHeader>
         <CardTitle className="text-lg">Preview: {title}</CardTitle>
       </CardHeader>
-      <CardContent className="prose dark:prose-invert max-w-none">
+      <CardContent className="prose dark:prose-invert max-w-none max-h-[600px] overflow-y-auto">
         <ReactMarkdown>{content}</ReactMarkdown>
       </CardContent>
     </Card>
