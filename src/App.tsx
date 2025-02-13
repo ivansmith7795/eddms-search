@@ -4,7 +4,6 @@ import { ThemeToggle } from "./components/theme/theme-toggle";
 import ThemeProvider from "./components/theme/theme-provider";
 import { NavMenu } from "./components/layout/nav-menu";
 import Home from "./components/home";
-import routes from "tempo-routes";
 
 function App() {
   return (
@@ -19,7 +18,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
             </Routes>
-            {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
+            
           </div>
         </>
       </Suspense>
